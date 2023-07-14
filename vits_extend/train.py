@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import logging
 import math
@@ -153,7 +154,7 @@ def train(rank, args, chkpt_path, hp, hp_str):
 
     trainloader = create_dataloader_train(hp, args.num_gpus, rank)
 
-    for epoch in range(init_epoch, hp.train.epochs):
+    for epoch in range(init_epoch, hp.train.epochs+1):
 
         trainloader.batch_sampler.set_epoch(epoch)
 
