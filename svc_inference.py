@@ -29,21 +29,18 @@ def load_svc_model(checkpoint_path, model):
 def main(args):
     if (args.ppg == None):
         args.ppg = "svc_tmp.ppg.npy"
-        print(
-            f"Auto run : python whisper/inference.py -w {args.wave} -p {args.ppg}")
-        os.system(f".\\runtime\\python whisper/inference.py -w {args.wave} -p {args.ppg}")
+        print(f"Auto run : python whisper/inference.py -w {args.wave} -p {args.ppg}")
+        os.system(f"runtime\\python whisper/inference.py -w {args.wave} -p {args.ppg}")
 
     if (args.vec == None):
         args.vec = "svc_tmp.vec.npy"
-        print(
-            f"Auto run : python hubert/inference.py -w {args.wave} -v {args.vec}")
-        os.system(f".\\runtime\\python hubert/inference.py -w {args.wave} -v {args.vec}")
+        print(f"Auto run : python hubert/inference.py -w {args.wave} -v {args.vec}")
+        os.system(f"runtime\\python hubert/inference.py -w {args.wave} -v {args.vec}")
 
     if (args.pit == None):
         args.pit = "svc_tmp.pit.csv"
-        print(
-            f"Auto run : python pitch/inference.py -w {args.wave} -p {args.pit}")
-        os.system(f".\\runtime\\python pitch/inference.py -w {args.wave} -p {args.pit}")
+        print(f"Auto run : python pitch/inference.py -w {args.wave} -p {args.pit}")
+        os.system(f"runtime\\python pitch/inference.py -w {args.wave} -p {args.pit}")
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     hp = OmegaConf.load(args.config)
