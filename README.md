@@ -62,6 +62,9 @@ git clone https://github.com/ouor/so-vits-svc-5.0
 # create virtual environment
 python -m venv .venv
 
+# activate virtual environment
+.venv\Scripts\activate
+
 # install pytorch
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
 
