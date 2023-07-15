@@ -1,6 +1,8 @@
 __pycache__/
 
 runtime/
+.venv/
+
 *_pretrain/
 crepe/assets/full.pth
 

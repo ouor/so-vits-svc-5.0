@@ -6,8 +6,6 @@
 <img alt="GitHub forks" src="https://img.shields.io/github/forks/PlayVoice/so-vits-svc-5.0">
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/PlayVoice/so-vits-svc-5.0">
 <img alt="GitHub" src="https://img.shields.io/github/license/PlayVoice/so-vits-svc-5.0">
-
-[中文文档](./README_ZH.md)
  
 </div>
 
@@ -55,6 +53,24 @@ due to the use of data perturbation, it takes longer to train than other project
 **USP : Unvoice and Silence with Pitch when infer**
 ![vits_svc_usp](https://github.com/PlayVoice/so-vits-svc-5.0/assets/16432329/ba733b48-8a89-4612-83e0-a0745587d150)
 
+## Quick Installation
+
+```PowerShell
+# clone project
+git clone https://github.com/ouor/so-vits-svc-5.0
+
+# create virtual environment
+python -m venv .venv
+
+# install pytorch
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
+
+# install dependencies
+pip install -r requirements.txt
+
+# run app.py
+python app.py
+```
 
 ## Setup Environment
 
