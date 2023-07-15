@@ -80,7 +80,7 @@ train:
   eps: 1e-9
   learning_rate: 5.0e-05
   lr_decay: 0.999875
-  model: half
+  model: sovits5.0
   port: 8001
   pretrain: vits_pretrain/sovits5.0.pretrain.pth
   seed: 1234

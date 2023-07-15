@@ -139,7 +139,7 @@ class WebUI:
 
     def preprocessing(self, thread_count):
         print('전처리 시작')
-        train_process = subprocess.Popen(r'runtime\python -u svc_preprocessing.py -t ' + str(thread_count), stdout=subprocess.PIPE)
+        train_process = subprocess.Popen(f'{sys.executable} -u svc_preprocessing.py -t {str(thread_count)}', stdout=subprocess.PIPE)
         while train_process.poll() is None:
             output = train_process.stdout.readline().decode('utf-8')
             print(output, end='')
@@ -166,8 +166,9 @@ class WebUI:
 
     def training(self, model_name):
         print('학습 시작')
-        print(r'runtime\python -u svc_trainer.py -c ' + self.train_config_path + ' -n ' + str(model_name))
-        train_process = subprocess.Popen(r'runtime\python -u svc_trainer.py -c ' + self.train_config_path + ' -n ' + str(model_name), stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        print('학습을 수행하는 새로운 콘솔 창이 열립니다.')
+        print('학습 도중 학습을 중지하려면, 콘솔 창을 닫으세요.')
+        train_process = subprocess.Popen(f'{sys.executable} -u svc_trainer.py -c {self.train_config_path} -n {str(model_name)}', stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
         while train_process.poll() is None:
             output = train_process.stdout.readline().decode('utf-8')
             print(output, end='')
@@ -181,26 +182,17 @@ class WebUI:
     def out_model(self, model_name, resume_model2):
         print('모델 내보내기 시작')
         try:
-            subprocess.Popen(r'runtime\python -u svc_export.py -c {} -p "chkpt/{}/{}"'.format(self.train_config_path, model_name, resume_model2),stdout=subprocess.PIPE)
+            subprocess.Popen(f'{sys.executable} -u svc_export.py -c {self.train_config_path} -p "chkpt/{model_name}/{resume_model2}"',stdout=subprocess.PIPE)
             print('모델 내보내기 성공')
         except Exception as e:
             print("에러 발생함：", e)
 
 
     def tensorboard(self):
-        if sys.platform.startswith('win'):
-            tb_process = subprocess.Popen(r'runtime\Scripts\tensorboard.exe --logdir=logs --port=6006', stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
-            webbrowser.open("http://localhost:6006")
-        else:
-            p1 = subprocess.Popen(["ps", "-ef"], stdout=subprocess.PIPE) #ps -ef | grep tensorboard | awk '{print $2}' | xargs kill -9
-            p2 = subprocess.Popen(["grep", "tensorboard"], stdin=p1.stdout, stdout=subprocess.PIPE)
-            p3 = subprocess.Popen(["awk", "{print $2}"], stdin=p2.stdout, stdout=subprocess.PIPE)
-            p4 = subprocess.Popen(["xargs", "kill", "-9"], stdin=p3.stdout)
-            p1.stdout.close()
-            p2.stdout.close()
-            p3.stdout.close()
-            p4.communicate()
-            tb_process = subprocess.Popen(r'runtime\Scripts\tensorboard.exe --logdir=logs --port=6007', stdout=subprocess.PIPE)  # AutoDL端口设置为6007
+        tensorboard_path = os.path.join(os.path.dirname(sys.executable), 'Scripts', 'tensorboard.exe')
+        tb_process = subprocess.Popen(f'{tensorboard_path} --logdir=logs --port=6006', stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        webbrowser.open("http://localhost:6006")
+
         while tb_process.poll() is None:
             output = tb_process.stdout.readline().decode('utf-8')
             print(output)
@@ -250,7 +242,7 @@ class WebUI:
             config['epochs'] = epochs
         with open("configs/train.yaml", "w") as f:
             yaml.dump(config, f)
-        train_process = subprocess.Popen(r'runtime\python -u svc_trainer.py -c {} -n {} -p "chkpt/{}/{}"'.format(self.train_config_path, model_name, model_name, resume_model), stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        train_process = subprocess.Popen(f'{sys.executable} -u svc_trainer.py -c {self.train_config_path} -n {model_name} -p "chkpt/{model_name}/{resume_model}"', stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
         while train_process.poll() is None:
             output = train_process.stdout.readline().decode('utf-8')
             print(output, end='')
@@ -269,7 +261,7 @@ class WebUI:
             soundfile.write(input_name, data, samplerate)
         train_config_path = shlex.quote(self.train_config_path)
         keychange = shlex.quote(str(keychange))
-        cmd = [r'runtime\python', "-u", "svc_inference.py", "--config", train_config_path, "--model", "sovits5.0.pth", "--spk",
+        cmd = [f'{sys.executable}', "-u", "svc_inference.py", "--config", train_config_path, "--model", "sovits5.0.pth", "--spk",
                f"data_svc/singer/{resume_voice}", "--wave", "test.wav", "--shift", keychange, '--clean']
         train_process = subprocess.run(cmd, shell=False, capture_output=True, text=True)
         print(train_process.stdout)
@@ -339,4 +331,3 @@ def check_pretrained():
 if __name__ == "__main__":
     check_pretrained()
     webui = WebUI()
-
