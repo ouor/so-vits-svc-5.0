@@ -190,6 +190,7 @@ class WebUI:
 
     def tensorboard(self):
         tensorboard_path = os.path.join(os.path.dirname(sys.executable), 'Scripts', 'tensorboard.exe')
+        print(tensorboard_path)
         tb_process = subprocess.Popen(f'{tensorboard_path} --logdir=logs --port=6006', stdout=subprocess.PIPE, creationflags=subprocess.CREATE_NEW_CONSOLE)
         webbrowser.open("http://localhost:6006")
 
@@ -328,6 +329,28 @@ def check_pretrained():
     print("모든 사전 학습 모델이 다운로드 되었습니다.")
     return
 
+def check_transformers():
+    try:
+        import transformers
+        del transformers
+    except:
+        print("transformers 라이브러리를 설치합니다.")
+        os.system(f"{sys.executable} -m pip install transformers")
+        print("transformers 라이브러리 설치 완료")
+    return
+
+def check_tensorboard():
+    try:
+        import tensorboard
+        del tensorboard
+    except:
+        print("tensorboard 라이브러리를 설치합니다.")
+        os.system(f"{sys.executable} -m pip install tensorboard")
+        print("tensorboard 라이브러리 설치 완료")
+    return
+
 if __name__ == "__main__":
     check_pretrained()
+    check_transformers()
+    check_tensorboard()
     webui = WebUI()

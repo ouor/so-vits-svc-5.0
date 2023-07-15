@@ -1,3 +1,6 @@
+Invoke-Expression "runtime/python.exe -m pip uninstall -y transformers"
+Invoke-Expression "runtime/python.exe -m pip uninstall -y tensorboard"
+
 $Date = Get-Date -Format "yyyyMMdd"
 $ArchiveName = "so-vits-svc-5.0-$Date.zip"
 
